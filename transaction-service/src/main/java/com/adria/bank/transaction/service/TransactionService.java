@@ -4,7 +4,7 @@ import com.adria.bank.transaction.domain.BankTransaction;
 import com.adria.bank.transaction.repository.TransactionRepository;
 import com.adria.bank.transaction.service.client.AccountClient;
 import com.adria.bank.transaction.service.client.AccountClient.AccountSnapshot;
-import feign.FeignException;
+import com.adria.bank.transaction.service.client.AccountGateway;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,7 +14,6 @@ import org.springframework.validation.annotation.Validated;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
-import java.util.function.Supplier;
 import static com.adria.bank.transaction.service.TransactionCommands.*;
 import static com.adria.bank.transaction.service.BankException.Reason.*;
 
@@ -23,11 +22,11 @@ import static com.adria.bank.transaction.service.BankException.Reason.*;
 @Transactional(readOnly = true)
 public class TransactionService {
     private final TransactionRepository transactions;
-    private final AccountClient accounts;
+    private final AccountGateway accounts;
     private final BigDecimal maxAmount;
 
-    public TransactionService(TransactionRepository transactions, AccountClient accounts,
-                              @Value("${bank.transaction.max-amount:1000}") BigDecimal maxAmount) {
+    public TransactionService(TransactionRepository transactions, AccountGateway accounts,
+                              @Value("${bank.transaction.max-amount}") BigDecimal maxAmount) {
         if (maxAmount.signum() <= 0) throw new IllegalArgumentException("Transaction ceiling must be positive");
         this.transactions = transactions;
         this.accounts = accounts;
@@ -46,15 +45,12 @@ public class TransactionService {
     @Transactional
     public BankTransaction create(@NotNull @Valid CreateTransaction request) {
         checkAmount(request.amount());
-        AccountSnapshot account = remote(() -> accounts.get(request.accountId()));
+        AccountSnapshot account = accounts.get(request.accountId());
         checkAccount(account, request.currency());
         checkFunds(account, request.amount());
         BankTransaction transaction = transactions.saveAndFlush(new BankTransaction(request.accountId(), null,
                 request.amount(), request.currency(), request.merchantCategory(), request.country()));
-        remote(() -> {
-            accounts.debit(request.accountId(), new AccountClient.Debit(request.amount(), request.currency()));
-            return null;
-        });
+        accounts.debit(request.accountId(), new AccountClient.Debit(request.amount(), request.currency()));
         return transaction;
     }
 
@@ -64,18 +60,15 @@ public class TransactionService {
         if (request.sourceAccountId().equals(request.destinationAccountId())) {
             throw new BankException(REJECTED, "Source and destination must be different");
         }
-        AccountSnapshot source = remote(() -> accounts.get(request.sourceAccountId()));
-        AccountSnapshot destination = remote(() -> accounts.get(request.destinationAccountId()));
+        AccountSnapshot source = accounts.get(request.sourceAccountId());
+        AccountSnapshot destination = accounts.get(request.destinationAccountId());
         checkAccount(source, request.currency());
         checkAccount(destination, request.currency());
         checkFunds(source, request.amount());
         BankTransaction transaction = transactions.saveAndFlush(new BankTransaction(request.sourceAccountId(),
                 request.destinationAccountId(), request.amount(), request.currency(), "TRANSFER", request.country()));
-        remote(() -> {
-            accounts.transfer(new AccountClient.Transfer(request.sourceAccountId(), request.destinationAccountId(),
-                    request.amount(), request.currency()));
-            return null;
-        });
+        accounts.transfer(new AccountClient.Transfer(request.sourceAccountId(), request.destinationAccountId(),
+                request.amount(), request.currency()));
         return transaction;
     }
 
@@ -98,15 +91,4 @@ public class TransactionService {
         }
     }
 
-    private <T> T remote(Supplier<T> call) {
-        try {
-            return call.get();
-        } catch (FeignException exception) {
-            if (exception.status() == 404) throw new BankException(NOT_FOUND, "Account not found");
-            if (exception.status() >= 400 && exception.status() < 500) {
-                throw new BankException(REJECTED, "Account service rejected the operation");
-            }
-            throw new BankException(UNAVAILABLE, "Account service is unavailable; operation not confirmed");
-        }
-    }
 }

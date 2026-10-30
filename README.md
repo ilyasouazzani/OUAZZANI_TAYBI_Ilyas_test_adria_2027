@@ -25,13 +25,13 @@ Depuis la racine : mvn clean package
 Le parent Maven centralise Java, Spring Boot, Spring Cloud et Spring AI.
 Les six modules contiennent leur point d'entrée et leur configuration.
 
-## État : étape 2
+## État : étape 3
 account-service et transaction-service proposent les API REST de création et
 de consultation des comptes et transactions, ainsi que les virements.
-Les bases H2 sont distinctes et en mémoire. Le client OpenFeign utilise
-ACCOUNT_SERVICE_URL, avec http://localhost:8081 comme valeur par défaut.
-Le plafond local bank.transaction.max-amount vaut 1000 ; sa centralisation
-sera réalisée à l'étape Config Server.
+Les bases H2 sont distinctes et en mémoire. OpenFeign utilise la découverte
+Eureka ; ACCOUNT_SERVICE_URL permet une URL directe pour un test isolé.
+Le Config Server fournit bank.transaction.max-amount=1000 et est requis au
+démarrage des services métier.
 
 Les contrôleurs délèguent à une couche service validée. Les contrôles portent
 sur le montant, le plafond, l'existence et l'état du compte, la devise et le
@@ -40,7 +40,11 @@ locale d'account-service. Il n'y a pas de transaction distribuée entre services
 
 Les instructions de lancement, requêtes REST et captures à réaliser sont dans
 [docs/etape-02-rapport.md](docs/etape-02-rapport.md).
-Les services techniques, MCP, GraphQL, Kafka et l'agent restent à implémenter.
+Eureka et Config Server sont implémentés. Resilience4J protège les appels Feign
+avec circuit breaker, retry des lectures et fallback HTTP 503.
+Les instructions de démarrage et les captures de cette étape sont dans
+[docs/etape-03-rapport.md](docs/etape-03-rapport.md).
+Gateway, MCP, GraphQL, Kafka et l'agent restent à implémenter.
 
 ## Certificats Maven sous Windows
 Si Maven signale « PKIX path building failed » alors que Windows reconnaît

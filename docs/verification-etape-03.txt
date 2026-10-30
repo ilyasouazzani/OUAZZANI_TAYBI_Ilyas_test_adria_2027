@@ -1,0 +1,30 @@
+Etape 3 : verification reelle
+26 tests, aucun echec, aucune erreur.
+
+[INFO] Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 12.29 s -- in com.adria.bank.account.AccountServiceTest
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.497 s -- in com.adria.bank.transaction.AccountGatewayTest
+[INFO] Tests run: 14, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 16.03 s -- in com.adria.bank.transaction.TransactionServiceTest
+
+[INFO] Reactor Summary for Bank Platform 0.0.1-SNAPSHOT:
+[INFO] 
+[INFO] Bank Platform ...................................... SUCCESS [  0.767 s]
+[INFO] account-service .................................... SUCCESS [ 16.772 s]
+[INFO] transaction-service ................................ SUCCESS [ 24.802 s]
+[INFO] discovery-service .................................. SUCCESS [ 13.291 s]
+[INFO] config-service ..................................... SUCCESS [  5.731 s]
+[INFO] gateway-service .................................... SUCCESS [  0.188 s]
+[INFO] ai-service ......................................... SUCCESS [  0.186 s]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  01:02 min
+[INFO] Finished at: 2026-10-30T11:31:53+01:00
+[INFO] ------------------------------------------------------------------------
+
+Test HTTP avec quatre JAR : PASS.
+Config Server : bank.transaction.max-amount=1000.
+Eureka : ACCOUNT-SERVICE et TRANSACTION-SERVICE enregistres.
+Feign : appel par nom de service, sans URL directe.
+Panne account-service : retries, circuit OPEN, fallback 503.
+Aucune transaction supplementaire persistee lors des trois requetes en panne.
+Details : verification-etape-03-rest.json.

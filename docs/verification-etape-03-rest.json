@@ -1,0 +1,499 @@
+{
+  "result": "PASS",
+  "verified": [
+    "Config Server ceiling=1000",
+    "Eureka registration",
+    "Feign service discovery without direct URL",
+    "ceiling accepted/rejected",
+    "retry on unavailable account lookup",
+    "OPEN circuit and 503 fallback",
+    "no extra persisted transaction"
+  ],
+  "checks": [
+    {
+      "port": 18761,
+      "method": "GET",
+      "path": "/actuator/health/readiness",
+      "status": 200,
+      "response": {
+        "status": "UP"
+      }
+    },
+    {
+      "port": 18888,
+      "method": "GET",
+      "path": "/actuator/health/readiness",
+      "status": 200,
+      "response": {
+        "status": "UP"
+      }
+    },
+    {
+      "port": 18888,
+      "method": "GET",
+      "path": "/transaction-service/default",
+      "status": 200,
+      "response": {
+        "name": "transaction-service",
+        "profiles": [
+          "default"
+        ],
+        "label": null,
+        "version": null,
+        "state": null,
+        "propertySources": [
+          {
+            "name": "classpath:/config-repo/application.properties",
+            "source": {
+              "bank.transaction.max-amount": "1000",
+              "eureka.client.service-url.defaultZone": "${EUREKA_URL:http://localhost:8761/eureka/}",
+              "eureka.client.registry-fetch-interval-seconds": "5",
+              "eureka.instance.hostname": "${SERVICE_HOST:localhost}",
+              "eureka.instance.initial-instance-info-replication-interval-seconds": "5",
+              "management.endpoint.health.probes.enabled": "true"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "port": 18081,
+      "method": "GET",
+      "path": "/api/accounts",
+      "status": 200,
+      "response": []
+    },
+    {
+      "port": 18082,
+      "method": "GET",
+      "path": "/api/transactions",
+      "status": 200,
+      "response": []
+    },
+    {
+      "port": 18761,
+      "method": "GET",
+      "path": "/eureka/apps",
+      "status": 200,
+      "response": {
+        "applications": {
+          "versions__delta": "1",
+          "apps__hashcode": "",
+          "application": []
+        }
+      }
+    },
+    {
+      "port": 18761,
+      "method": "GET",
+      "path": "/eureka/apps",
+      "status": 200,
+      "response": {
+        "applications": {
+          "versions__delta": "1",
+          "apps__hashcode": "",
+          "application": []
+        }
+      }
+    },
+    {
+      "port": 18761,
+      "method": "GET",
+      "path": "/eureka/apps",
+      "status": 200,
+      "response": {
+        "applications": {
+          "versions__delta": "1",
+          "apps__hashcode": "",
+          "application": []
+        }
+      }
+    },
+    {
+      "port": 18761,
+      "method": "GET",
+      "path": "/eureka/apps",
+      "status": 200,
+      "response": {
+        "applications": {
+          "versions__delta": "1",
+          "apps__hashcode": "",
+          "application": []
+        }
+      }
+    },
+    {
+      "port": 18761,
+      "method": "GET",
+      "path": "/eureka/apps",
+      "status": 200,
+      "response": {
+        "applications": {
+          "versions__delta": "1",
+          "apps__hashcode": "",
+          "application": []
+        }
+      }
+    },
+    {
+      "port": 18761,
+      "method": "GET",
+      "path": "/eureka/apps",
+      "status": 200,
+      "response": {
+        "applications": {
+          "versions__delta": "1",
+          "apps__hashcode": "",
+          "application": []
+        }
+      }
+    },
+    {
+      "port": 18761,
+      "method": "GET",
+      "path": "/eureka/apps",
+      "status": 200,
+      "response": {
+        "applications": {
+          "versions__delta": "1",
+          "apps__hashcode": "",
+          "application": []
+        }
+      }
+    },
+    {
+      "port": 18761,
+      "method": "GET",
+      "path": "/eureka/apps",
+      "status": 200,
+      "response": {
+        "applications": {
+          "versions__delta": "1",
+          "apps__hashcode": "UP_2_",
+          "application": [
+            {
+              "name": "ACCOUNT-SERVICE",
+              "instance": [
+                {
+                  "instanceId": "localhost:account-service:18081",
+                  "hostName": "127.0.0.1",
+                  "app": "ACCOUNT-SERVICE",
+                  "ipAddr": "192.168.56.1",
+                  "status": "UP",
+                  "overriddenStatus": "UNKNOWN",
+                  "port": {
+                    "$": 18081,
+                    "@enabled": "true"
+                  },
+                  "securePort": {
+                    "$": 443,
+                    "@enabled": "false"
+                  },
+                  "countryId": 1,
+                  "dataCenterInfo": {
+                    "@class": "com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo",
+                    "name": "MyOwn"
+                  },
+                  "leaseInfo": {
+                    "renewalIntervalInSecs": 30,
+                    "durationInSecs": 90,
+                    "registrationTimestamp": 1793356461781,
+                    "lastRenewalTimestamp": 1793356461781,
+                    "evictionTimestamp": 0,
+                    "serviceUpTimestamp": 1793356461091
+                  },
+                  "metadata": {
+                    "management.port": "18081"
+                  },
+                  "homePageUrl": "http://127.0.0.1:18081/",
+                  "statusPageUrl": "http://127.0.0.1:18081/actuator/info",
+                  "healthCheckUrl": "http://127.0.0.1:18081/actuator/health",
+                  "vipAddress": "account-service",
+                  "secureVipAddress": "account-service",
+                  "isCoordinatingDiscoveryServer": "false",
+                  "lastUpdatedTimestamp": "1793356461781",
+                  "lastDirtyTimestamp": "1793356460835",
+                  "actionType": "ADDED"
+                }
+              ]
+            },
+            {
+              "name": "TRANSACTION-SERVICE",
+              "instance": [
+                {
+                  "instanceId": "localhost:transaction-service:18082",
+                  "hostName": "127.0.0.1",
+                  "app": "TRANSACTION-SERVICE",
+                  "ipAddr": "192.168.56.1",
+                  "status": "UP",
+                  "overriddenStatus": "UNKNOWN",
+                  "port": {
+                    "$": 18082,
+                    "@enabled": "true"
+                  },
+                  "securePort": {
+                    "$": 443,
+                    "@enabled": "false"
+                  },
+                  "countryId": 1,
+                  "dataCenterInfo": {
+                    "@class": "com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo",
+                    "name": "MyOwn"
+                  },
+                  "leaseInfo": {
+                    "renewalIntervalInSecs": 30,
+                    "durationInSecs": 90,
+                    "registrationTimestamp": 1793356463498,
+                    "lastRenewalTimestamp": 1793356463498,
+                    "evictionTimestamp": 0,
+                    "serviceUpTimestamp": 1793356462988
+                  },
+                  "metadata": {
+                    "management.port": "18082"
+                  },
+                  "homePageUrl": "http://127.0.0.1:18082/",
+                  "statusPageUrl": "http://127.0.0.1:18082/actuator/info",
+                  "healthCheckUrl": "http://127.0.0.1:18082/actuator/health",
+                  "vipAddress": "transaction-service",
+                  "secureVipAddress": "transaction-service",
+                  "isCoordinatingDiscoveryServer": "false",
+                  "lastUpdatedTimestamp": "1793356463498",
+                  "lastDirtyTimestamp": "1793356462925",
+                  "actionType": "ADDED"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "port": 18081,
+      "method": "POST",
+      "path": "/api/accounts",
+      "status": 201,
+      "response": {
+        "id": "e6d1eee2-99bf-4361-9702-d6b5b18deb80",
+        "customerReference": "INFRA-A",
+        "status": "ACTIVE",
+        "currency": "EUR",
+        "balance": 2000.0
+      }
+    },
+    {
+      "port": 18082,
+      "method": "POST",
+      "path": "/api/transactions",
+      "status": 201,
+      "response": {
+        "id": "d201311e-8d1f-4784-ac72-ccc553c8e991",
+        "accountId": "e6d1eee2-99bf-4361-9702-d6b5b18deb80",
+        "destinationAccountId": null,
+        "amount": 1000,
+        "currency": "EUR",
+        "merchantCategory": "GROCERY",
+        "country": "FR",
+        "createdAt": "2026-10-30T10:34:37.088557500Z"
+      }
+    },
+    {
+      "port": 18081,
+      "method": "GET",
+      "path": "/api/accounts/e6d1eee2-99bf-4361-9702-d6b5b18deb80/balance",
+      "status": 200,
+      "response": {
+        "accountId": "e6d1eee2-99bf-4361-9702-d6b5b18deb80",
+        "currency": "EUR",
+        "balance": 1000.0
+      }
+    },
+    {
+      "port": 18082,
+      "method": "POST",
+      "path": "/api/transactions",
+      "status": 409,
+      "response": {
+        "type": "about:blank",
+        "title": "Conflict",
+        "status": 409,
+        "detail": "Amount must be positive and at most 1000",
+        "instance": "/api/transactions"
+      }
+    },
+    {
+      "port": 18082,
+      "method": "POST",
+      "path": "/api/transactions",
+      "status": 503,
+      "response": {
+        "type": "about:blank",
+        "title": "Service Unavailable",
+        "status": 503,
+        "detail": "Account service unavailable (account service unavailable); operation not confirmed",
+        "instance": "/api/transactions"
+      }
+    },
+    {
+      "port": 18082,
+      "method": "POST",
+      "path": "/api/transactions",
+      "status": 503,
+      "response": {
+        "type": "about:blank",
+        "title": "Service Unavailable",
+        "status": 503,
+        "detail": "Account service unavailable (account service unavailable); operation not confirmed",
+        "instance": "/api/transactions"
+      }
+    },
+    {
+      "port": 18082,
+      "method": "POST",
+      "path": "/api/transactions",
+      "status": 503,
+      "response": {
+        "type": "about:blank",
+        "title": "Service Unavailable",
+        "status": 503,
+        "detail": "Account service unavailable (circuit open); operation not confirmed",
+        "instance": "/api/transactions"
+      }
+    },
+    {
+      "port": 18082,
+      "method": "GET",
+      "path": "/api/transactions",
+      "status": 200,
+      "response": [
+        {
+          "id": "d201311e-8d1f-4784-ac72-ccc553c8e991",
+          "accountId": "e6d1eee2-99bf-4361-9702-d6b5b18deb80",
+          "destinationAccountId": null,
+          "amount": 1000.0,
+          "currency": "EUR",
+          "merchantCategory": "GROCERY",
+          "country": "FR",
+          "createdAt": "2026-10-30T10:34:37.088558Z"
+        }
+      ]
+    },
+    {
+      "port": 18082,
+      "method": "GET",
+      "path": "/actuator/circuitbreakerevents",
+      "status": 200,
+      "response": {
+        "circuitBreakerEvents": [
+          {
+            "circuitBreakerName": "accountService",
+            "type": "SUCCESS",
+            "creationTime": "2026-10-30T11:34:37.084550200+01:00[Africa/Casablanca]",
+            "errorMessage": null,
+            "durationInMs": 140,
+            "stateTransition": null
+          },
+          {
+            "circuitBreakerName": "accountService",
+            "type": "SUCCESS",
+            "creationTime": "2026-10-30T11:34:37.247169700+01:00[Africa/Casablanca]",
+            "errorMessage": null,
+            "durationInMs": 76,
+            "stateTransition": null
+          },
+          {
+            "circuitBreakerName": "accountService",
+            "type": "ERROR",
+            "creationTime": "2026-10-30T11:34:37.756814400+01:00[Africa/Casablanca]",
+            "errorMessage": "feign.RetryableException: Connection refused: getsockopt executing GET http://account-service/api/accounts/e6d1eee2-99bf-4361-9702-d6b5b18deb80",
+            "durationInMs": 421,
+            "stateTransition": null
+          },
+          {
+            "circuitBreakerName": "accountService",
+            "type": "ERROR",
+            "creationTime": "2026-10-30T11:34:38.210157+01:00[Africa/Casablanca]",
+            "errorMessage": "feign.RetryableException: Connection refused: getsockopt executing GET http://account-service/api/accounts/e6d1eee2-99bf-4361-9702-d6b5b18deb80",
+            "durationInMs": 418,
+            "stateTransition": null
+          },
+          {
+            "circuitBreakerName": "accountService",
+            "type": "FAILURE_RATE_EXCEEDED",
+            "creationTime": "2026-10-30T11:34:38.210157+01:00[Africa/Casablanca]",
+            "errorMessage": null,
+            "durationInMs": null,
+            "stateTransition": null
+          },
+          {
+            "circuitBreakerName": "accountService",
+            "type": "STATE_TRANSITION",
+            "creationTime": "2026-10-30T11:34:38.213138600+01:00[Africa/Casablanca]",
+            "errorMessage": null,
+            "durationInMs": null,
+            "stateTransition": "CLOSED_TO_OPEN"
+          },
+          {
+            "circuitBreakerName": "accountService",
+            "type": "NOT_PERMITTED",
+            "creationTime": "2026-10-30T11:34:38.222662700+01:00[Africa/Casablanca]",
+            "errorMessage": null,
+            "durationInMs": null,
+            "stateTransition": null
+          }
+        ]
+      }
+    },
+    {
+      "port": 18082,
+      "method": "GET",
+      "path": "/actuator/retryevents",
+      "status": 200,
+      "response": {
+        "retryEvents": [
+          {
+            "retryName": "accountService",
+            "type": "RETRY",
+            "creationTime": "2026-10-30T11:34:37.343065+01:00[Africa/Casablanca]",
+            "errorMessage": "feign.RetryableException: Connection refused: getsockopt executing GET http://account-service/api/accounts/e6d1eee2-99bf-4361-9702-d6b5b18deb80",
+            "numberOfAttempts": 1
+          },
+          {
+            "retryName": "accountService",
+            "type": "RETRY",
+            "creationTime": "2026-10-30T11:34:37.551377300+01:00[Africa/Casablanca]",
+            "errorMessage": "feign.RetryableException: Connection refused: getsockopt executing GET http://account-service/api/accounts/e6d1eee2-99bf-4361-9702-d6b5b18deb80",
+            "numberOfAttempts": 2
+          },
+          {
+            "retryName": "accountService",
+            "type": "ERROR",
+            "creationTime": "2026-10-30T11:34:37.756814400+01:00[Africa/Casablanca]",
+            "errorMessage": "feign.RetryableException: Connection refused: getsockopt executing GET http://account-service/api/accounts/e6d1eee2-99bf-4361-9702-d6b5b18deb80",
+            "numberOfAttempts": 3
+          },
+          {
+            "retryName": "accountService",
+            "type": "RETRY",
+            "creationTime": "2026-10-30T11:34:37.792677+01:00[Africa/Casablanca]",
+            "errorMessage": "feign.RetryableException: Connection refused: getsockopt executing GET http://account-service/api/accounts/e6d1eee2-99bf-4361-9702-d6b5b18deb80",
+            "numberOfAttempts": 1
+          },
+          {
+            "retryName": "accountService",
+            "type": "RETRY",
+            "creationTime": "2026-10-30T11:34:38.006871200+01:00[Africa/Casablanca]",
+            "errorMessage": "feign.RetryableException: Connection refused: getsockopt executing GET http://account-service/api/accounts/e6d1eee2-99bf-4361-9702-d6b5b18deb80",
+            "numberOfAttempts": 2
+          },
+          {
+            "retryName": "accountService",
+            "type": "ERROR",
+            "creationTime": "2026-10-30T11:34:38.210157+01:00[Africa/Casablanca]",
+            "errorMessage": "feign.RetryableException: Connection refused: getsockopt executing GET http://account-service/api/accounts/e6d1eee2-99bf-4361-9702-d6b5b18deb80",
+            "numberOfAttempts": 3
+          }
+        ]
+      }
+    }
+  ]
+}

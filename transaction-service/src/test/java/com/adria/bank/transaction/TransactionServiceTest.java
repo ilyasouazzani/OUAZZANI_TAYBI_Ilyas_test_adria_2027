@@ -43,6 +43,7 @@ class TransactionServiceTest {
     @Autowired MockMvc mvc;
     @Autowired ObjectMapper json;
     @MockitoBean AccountClient accounts;
+    @Autowired io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry breakers;
 
     private final UUID sourceId = UUID.randomUUID();
     private final UUID targetId = UUID.randomUUID();
@@ -50,6 +51,7 @@ class TransactionServiceTest {
     @BeforeEach
     void clean() {
         repository.deleteAll();
+        breakers.circuitBreaker("accountService").reset();
         when(accounts.get(sourceId)).thenReturn(new AccountSnapshot(sourceId, "A", "ACTIVE", "EUR", 2000));
         when(accounts.get(targetId)).thenReturn(new AccountSnapshot(targetId, "B", "ACTIVE", "EUR", 100));
     }

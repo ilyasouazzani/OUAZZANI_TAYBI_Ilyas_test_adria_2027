@@ -124,3 +124,8 @@ Figure 02-02 — Consultation du solde du compte source avant l'enregistrement d
 ![Détail de la transaction de 250 EUR, avec identifiants et date de création.](captures/02-03-transaction.png)
 Figure 02-03 — Consultation par GET de la transaction précédemment créée : montant de 250 EUR, compte source et date. Cette capture montre la lecture du résultat ; le statut HTTP 201 du POST a été vérifié séparément.
 
+
+### Capture reçue : solde après transaction
+![Solde du compte source après débit : 1250 EUR.](captures/02-04-solde-apres.png)
+Figure 02-04 — Après le débit de 250 EUR, le solde passe de 1500 à 1250 EUR.
+

@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-@FeignClient(name = "account-service", url = "${bank.account-service.url:http://localhost:8081}")
+@FeignClient(name = "account-service", url = "${bank.account-service.url:}")
 public interface AccountClient {
     @GetMapping("/api/accounts/{id}")
     AccountSnapshot get(@PathVariable("id") UUID id);
