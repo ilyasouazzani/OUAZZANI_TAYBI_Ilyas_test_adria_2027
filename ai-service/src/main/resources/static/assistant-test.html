@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="fr">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Test REST - Assistant bancaire Gemini</title>
+<style>
+body{font:16px system-ui;background:#f3f6f8;color:#173b57;margin:32px auto;max-width:1000px;padding:0 20px}h1{font-size:26px}section{background:white;border:1px solid #d2dde4;border-radius:8px;padding:20px;margin:18px 0}textarea{box-sizing:border-box;width:100%;min-height:100px;font:16px system-ui;padding:12px}button{background:#173b57;color:white;border:0;border-radius:5px;padding:12px 20px;margin:12px 8px 0 0;cursor:pointer}button:disabled{opacity:.5}pre{white-space:pre-wrap;overflow-wrap:anywhere;color:#172d3c;font-size:14px}.label{font-weight:600}#answer{font-size:22px;padding:12px 0}
+</style>
+<h1>Assistant bancaire - test REST Gemini / MCP</h1>
+<p>Client de démonstration pour l’endpoint <code>POST /api/assistant/chat</code>.</p>
+<section><label for="message" class="label">Question</label><textarea id="message"></textarea>
+<button id="send">Envoyer</button><button id="tools">Lister les outils MCP</button></section>
+<section><span class="label">Résultat réel de l’API</span><p id="status">Aucune requête exécutée.</p><div id="answer"></div><pre id="response"></pre></section>
+<section><span class="label">Requête envoyée</span><pre id="request"></pre></section>
+<script>
+const message=document.querySelector('#message'),status=document.querySelector('#status'),answer=document.querySelector('#answer'),response=document.querySelector('#response'),request=document.querySelector('#request'),send=document.querySelector('#send');
+const id=new URLSearchParams(location.search).get('accountId');
+message.value=id?`Consulte avec un outil MCP le solde du compte ${id} et indique le montant et la devise.`:'Liste les comptes de démonstration avec leurs soldes et devises en utilisant les outils MCP.';
+send.onclick=async()=>{send.disabled=true;answer.textContent='';response.textContent='';const body={message:message.value};request.textContent='POST /api/assistant/chat\n'+JSON.stringify(body,null,2);status.textContent='Requête en cours…';try{const r=await fetch('/api/assistant/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});const data=await r.json();status.textContent='HTTP '+r.status;answer.textContent=data.answer||data.detail||'Réponse sans texte';response.textContent=JSON.stringify(data,null,2);}catch(e){status.textContent='Erreur de connexion : '+e.message;}finally{send.disabled=false;}};
+document.querySelector('#tools').onclick=async()=>{request.textContent='GET /api/assistant/tools';answer.textContent='';try{const r=await fetch('/api/assistant/tools');const data=await r.json();status.textContent='HTTP '+r.status+' - '+(Array.isArray(data)?data.length:0)+' outils MCP';response.textContent=JSON.stringify(data,null,2);}catch(e){status.textContent='Erreur de connexion : '+e.message;}};
+</script>
+</html>

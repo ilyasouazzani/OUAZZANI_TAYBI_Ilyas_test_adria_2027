@@ -1,0 +1,37 @@
+[
+  {
+    "name": "transferMoney",
+    "description": "Transfer money between two distinct active accounts in the same currency; only execute an explicitly requested transfer",
+    "inputSchema": "{\"additionalProperties\":false,\"type\":\"object\",\"properties\":{\"sourceAccountId\":{\"type\":\"string\"},\"destinationAccountId\":{\"type\":\"string\"},\"amount\":{\"type\":\"number\"},\"currency\":{\"type\":\"string\"},\"country\":{\"type\":\"string\"}},\"required\":[\"sourceAccountId\",\"destinationAccountId\",\"amount\",\"currency\",\"country\"]}"
+  },
+  {
+    "name": "listAccountTransactions",
+    "description": "List transactions and transfers involving an account UUID",
+    "inputSchema": "{\"additionalProperties\":false,\"type\":\"object\",\"properties\":{\"accountId\":{\"type\":\"string\"}},\"required\":[\"accountId\"]}"
+  },
+  {
+    "name": "createTransaction",
+    "description": "Debit an active account after checking currency, balance and configured ceiling; only execute an explicitly requested debit",
+    "inputSchema": "{\"additionalProperties\":false,\"type\":\"object\",\"properties\":{\"accountId\":{\"type\":\"string\"},\"amount\":{\"type\":\"number\"},\"currency\":{\"type\":\"string\"},\"merchantCategory\":{\"type\":\"string\"},\"country\":{\"type\":\"string\"}},\"required\":[\"accountId\",\"amount\",\"currency\",\"merchantCategory\",\"country\"]}"
+  },
+  {
+    "name": "getTransaction",
+    "description": "Get one bank transaction by its UUID",
+    "inputSchema": "{\"additionalProperties\":false,\"type\":\"object\",\"properties\":{\"transactionId\":{\"type\":\"string\"}},\"required\":[\"transactionId\"]}"
+  },
+  {
+    "name": "listAccounts",
+    "description": "List all bank accounts and their identifiers",
+    "inputSchema": "{\"additionalProperties\":false,\"type\":\"object\",\"properties\":{},\"required\":[]}"
+  },
+  {
+    "name": "getAccount",
+    "description": "Get an existing account, its status, currency and balance by UUID",
+    "inputSchema": "{\"additionalProperties\":false,\"type\":\"object\",\"properties\":{\"accountId\":{\"type\":\"string\"}},\"required\":[\"accountId\"]}"
+  },
+  {
+    "name": "getAccountBalance",
+    "description": "Read the current balance and currency of a bank account by UUID",
+    "inputSchema": "{\"additionalProperties\":false,\"type\":\"object\",\"properties\":{\"accountId\":{\"type\":\"string\"}},\"required\":[\"accountId\"]}"
+  }
+]

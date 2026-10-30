@@ -1,0 +1,10 @@
+{
+  "context": "Requete REST reelle enregistree, comptes de demonstration",
+  "request": {
+    "message": "Utilise un outil pour consulter le solde du compte 175968ad-f112-416c-9c47-aef217232eb4. Réponds uniquement avec le montant du solde et sa devise."
+  },
+  "httpStatus": 200,
+  "response": {
+    "answer": "1250.0 EUR"
+  }
+}

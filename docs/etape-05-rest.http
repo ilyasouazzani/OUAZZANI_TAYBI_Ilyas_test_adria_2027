@@ -1,0 +1,14 @@
+### Outils découverts depuis les deux serveurs MCP
+GET http://localhost:8083/api/assistant/tools
+
+### Chat : nécessite GEMINI_API_KEY et AI_CHAT_MODEL=google-genai dans .env
+POST http://localhost:8083/api/assistant/chat
+Content-Type: application/json
+
+{"message":"Consulte le solde du compte UUID_DU_COMPTE et indique sa devise."}
+
+### Une question vide doit être rejetée avec HTTP 400
+POST http://localhost:8083/api/assistant/chat
+Content-Type: application/json
+
+{"message":" "}
