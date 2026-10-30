@@ -1,0 +1,5 @@
+type BankTransaction { id: ID!, accountId: ID!, destinationAccountId: ID, amount: String!, currency: String!, merchantCategory: String!, country: String!, createdAt: String! }
+input CreateTransactionInput { accountId: ID!, amount: String!, currency: String!, merchantCategory: String!, country: String! }
+input TransferInput { sourceAccountId: ID!, destinationAccountId: ID!, amount: String!, currency: String!, country: String! }
+type Query { transactions(accountId: ID): [BankTransaction!]!, transaction(id: ID!): BankTransaction }
+type Mutation { createTransaction(input: CreateTransactionInput!): BankTransaction!, transferMoney(input: TransferInput!): BankTransaction! }

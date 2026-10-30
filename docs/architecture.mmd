@@ -1,0 +1,20 @@
+flowchart TB
+    REST[Client REST / GraphiQL] --> GW[Gateway :8080]
+    GW --> A[account-service :8081]
+    GW --> T[transaction-service :8082]
+    GW --> AI[Agent Spring AI Gemini :8083]
+    AI -->|MCP Streamable HTTP| A
+    AI -->|MCP Streamable HTTP| T
+    T -->|OpenFeign + Resilience4J| A
+    A --> DA[(Base comptes H2)]
+    T --> DT[(Base transactions H2)]
+    T -->|Après commit, clé accountId| K[Kafka bank.transactions.created]
+    K --> C[Consumer de journalisation]
+    E[Eureka :8761] -. Découverte .-> GW
+    E -. Découverte .-> A
+    E -. Découverte .-> T
+    E -. Découverte .-> AI
+    CFG[Config Server :8888] -. Configuration .-> GW
+    CFG -. Configuration .-> A
+    CFG -. plafond 1000 .-> T
+    CFG -. Configuration .-> AI

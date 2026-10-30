@@ -57,12 +57,20 @@ classDiagram
     }
     class AccountController
     class TransactionController
+    class AccountGraphqlController
+    class TransactionGraphqlController
+    class AccountTools
+    class TransactionTools
     BankAccount --> AccountStatus
     BankTransaction ..> BankAccount : reference UUID, pas de jointure JPA
     AccountController --> AccountService
+    AccountGraphqlController --> AccountService
+    AccountTools --> AccountService
     AccountService --> AccountRepository
     AccountRepository --> BankAccount
     TransactionController --> TransactionService
+    TransactionGraphqlController --> TransactionService
+    TransactionTools --> TransactionService
     TransactionService --> TransactionRepository
     TransactionRepository --> BankTransaction
     TransactionService --> AccountGateway
