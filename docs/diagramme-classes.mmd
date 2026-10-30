@@ -1,0 +1,64 @@
+classDiagram
+    class BankAccount {
+        UUID id
+        String customerReference
+        AccountStatus status
+        String currency
+        double balance
+    }
+    class AccountStatus {
+        <<enumeration>>
+        ACTIVE
+        BLOCKED
+    }
+    class BankTransaction {
+        UUID id
+        UUID accountId
+        UUID destinationAccountId
+        BigDecimal amount
+        String currency
+        String merchantCategory
+        String country
+        Instant createdAt
+    }
+    class AccountService {
+        create(request)
+        get(id)
+        list(customerReference)
+        balance(id)
+        changeStatus(id, request)
+        debit(id, request)
+        transfer(request)
+    }
+    class TransactionService {
+        create(request)
+        get(id)
+        list(accountId)
+        transfer(request)
+    }
+    class AccountClient {
+        <<interface>>
+        get(id)
+        debit(id, request)
+        transfer(request)
+    }
+    class AccountRepository {
+        <<interface>>
+        findForUpdate(id)
+    }
+    class TransactionRepository {
+        <<interface>>
+        findByAccountIdOrDestinationAccountIdOrderByCreatedAtDesc(accountId, destinationAccountId)
+    }
+    class AccountController
+    class TransactionController
+    BankAccount --> AccountStatus
+    BankTransaction ..> BankAccount : reference UUID, pas de jointure JPA
+    AccountController --> AccountService
+    AccountService --> AccountRepository
+    AccountRepository --> BankAccount
+    TransactionController --> TransactionService
+    TransactionService --> TransactionRepository
+    TransactionRepository --> BankTransaction
+    TransactionService --> AccountClient
+    AccountClient ..> AccountController : OpenFeign / REST

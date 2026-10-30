@@ -1,0 +1,268 @@
+{
+  "result": "PASS",
+  "transport": "HTTP between two executable JARs, actual OpenFeign client",
+  "requests": 19,
+  "checks": [
+    {
+      "method": "POST",
+      "path": "/api/accounts",
+      "status": 201,
+      "response": {
+        "id": "e165136b-cc22-4be3-bba0-f609d84c7f34",
+        "customerReference": "SMOKE-A",
+        "status": "ACTIVE",
+        "currency": "EUR",
+        "balance": 1500.0
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/accounts",
+      "status": 201,
+      "response": {
+        "id": "491114ae-dc06-4cb1-aa11-f38db462115c",
+        "customerReference": "SMOKE-B",
+        "status": "ACTIVE",
+        "currency": "EUR",
+        "balance": 200.0
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/accounts/e165136b-cc22-4be3-bba0-f609d84c7f34/balance",
+      "status": 200,
+      "response": {
+        "accountId": "e165136b-cc22-4be3-bba0-f609d84c7f34",
+        "currency": "EUR",
+        "balance": 1500.0
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/transactions",
+      "status": 201,
+      "response": {
+        "id": "d9fe5455-ff96-47f7-bcfd-dd52c65a2a73",
+        "accountId": "e165136b-cc22-4be3-bba0-f609d84c7f34",
+        "destinationAccountId": null,
+        "amount": 250,
+        "currency": "EUR",
+        "merchantCategory": "GROCERY",
+        "country": "FR",
+        "createdAt": "2026-10-30T09:51:08.096942200Z"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/accounts/e165136b-cc22-4be3-bba0-f609d84c7f34/balance",
+      "status": 200,
+      "response": {
+        "accountId": "e165136b-cc22-4be3-bba0-f609d84c7f34",
+        "currency": "EUR",
+        "balance": 1250.0
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/transactions",
+      "status": 400,
+      "response": {
+        "type": "about:blank",
+        "title": "Bad Request",
+        "status": 400,
+        "detail": "amount: doit être supérieur à 0",
+        "instance": "/api/transactions"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/transactions",
+      "status": 400,
+      "response": {
+        "type": "about:blank",
+        "title": "Bad Request",
+        "status": 400,
+        "detail": "amount: doit être supérieur à 0",
+        "instance": "/api/transactions"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/transactions",
+      "status": 409,
+      "response": {
+        "type": "about:blank",
+        "title": "Conflict",
+        "status": 409,
+        "detail": "Amount must be positive and at most 1000",
+        "instance": "/api/transactions"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/transactions",
+      "status": 409,
+      "response": {
+        "type": "about:blank",
+        "title": "Conflict",
+        "status": 409,
+        "detail": "Currency mismatch",
+        "instance": "/api/transactions"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/transactions/transfers",
+      "status": 201,
+      "response": {
+        "id": "9196ed4c-813c-429a-9b08-5ee01ee14059",
+        "accountId": "e165136b-cc22-4be3-bba0-f609d84c7f34",
+        "destinationAccountId": "491114ae-dc06-4cb1-aa11-f38db462115c",
+        "amount": 100,
+        "currency": "EUR",
+        "merchantCategory": "TRANSFER",
+        "country": "FR",
+        "createdAt": "2026-10-30T09:51:09.299610700Z"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/accounts/e165136b-cc22-4be3-bba0-f609d84c7f34/balance",
+      "status": 200,
+      "response": {
+        "accountId": "e165136b-cc22-4be3-bba0-f609d84c7f34",
+        "currency": "EUR",
+        "balance": 1150.0
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/accounts/491114ae-dc06-4cb1-aa11-f38db462115c/balance",
+      "status": 200,
+      "response": {
+        "accountId": "491114ae-dc06-4cb1-aa11-f38db462115c",
+        "currency": "EUR",
+        "balance": 300.0
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/transactions?accountId=491114ae-dc06-4cb1-aa11-f38db462115c",
+      "status": 200,
+      "response": [
+        {
+          "id": "9196ed4c-813c-429a-9b08-5ee01ee14059",
+          "accountId": "e165136b-cc22-4be3-bba0-f609d84c7f34",
+          "destinationAccountId": "491114ae-dc06-4cb1-aa11-f38db462115c",
+          "amount": 100.0,
+          "currency": "EUR",
+          "merchantCategory": "TRANSFER",
+          "country": "FR",
+          "createdAt": "2026-10-30T09:51:09.299611Z"
+        }
+      ]
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/accounts/e165136b-cc22-4be3-bba0-f609d84c7f34/status",
+      "status": 200,
+      "response": {
+        "id": "e165136b-cc22-4be3-bba0-f609d84c7f34",
+        "customerReference": "SMOKE-A",
+        "status": "BLOCKED",
+        "currency": "EUR",
+        "balance": 1150.0
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/transactions",
+      "status": 409,
+      "response": {
+        "type": "about:blank",
+        "title": "Conflict",
+        "status": 409,
+        "detail": "Account is blocked",
+        "instance": "/api/transactions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/transactions",
+      "status": 200,
+      "response": [
+        {
+          "id": "9196ed4c-813c-429a-9b08-5ee01ee14059",
+          "accountId": "e165136b-cc22-4be3-bba0-f609d84c7f34",
+          "destinationAccountId": "491114ae-dc06-4cb1-aa11-f38db462115c",
+          "amount": 100.0,
+          "currency": "EUR",
+          "merchantCategory": "TRANSFER",
+          "country": "FR",
+          "createdAt": "2026-10-30T09:51:09.299611Z"
+        },
+        {
+          "id": "d9fe5455-ff96-47f7-bcfd-dd52c65a2a73",
+          "accountId": "e165136b-cc22-4be3-bba0-f609d84c7f34",
+          "destinationAccountId": null,
+          "amount": 250.0,
+          "currency": "EUR",
+          "merchantCategory": "GROCERY",
+          "country": "FR",
+          "createdAt": "2026-10-30T09:51:08.096942Z"
+        }
+      ]
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/accounts/e165136b-cc22-4be3-bba0-f609d84c7f34/status",
+      "status": 200,
+      "response": {
+        "id": "e165136b-cc22-4be3-bba0-f609d84c7f34",
+        "customerReference": "SMOKE-A",
+        "status": "ACTIVE",
+        "currency": "EUR",
+        "balance": 1150.0
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/transactions",
+      "status": 503,
+      "response": {
+        "type": "about:blank",
+        "title": "Service Unavailable",
+        "status": 503,
+        "detail": "Account service is unavailable; operation not confirmed",
+        "instance": "/api/transactions"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/transactions",
+      "status": 200,
+      "response": [
+        {
+          "id": "9196ed4c-813c-429a-9b08-5ee01ee14059",
+          "accountId": "e165136b-cc22-4be3-bba0-f609d84c7f34",
+          "destinationAccountId": "491114ae-dc06-4cb1-aa11-f38db462115c",
+          "amount": 100.0,
+          "currency": "EUR",
+          "merchantCategory": "TRANSFER",
+          "country": "FR",
+          "createdAt": "2026-10-30T09:51:09.299611Z"
+        },
+        {
+          "id": "d9fe5455-ff96-47f7-bcfd-dd52c65a2a73",
+          "accountId": "e165136b-cc22-4be3-bba0-f609d84c7f34",
+          "destinationAccountId": null,
+          "amount": 250.0,
+          "currency": "EUR",
+          "merchantCategory": "GROCERY",
+          "country": "FR",
+          "createdAt": "2026-10-30T09:51:08.096942Z"
+        }
+      ]
+    }
+  ]
+}

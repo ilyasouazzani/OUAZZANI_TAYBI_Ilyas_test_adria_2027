@@ -1,0 +1,119 @@
+@accounts = http://localhost:8081/api/accounts
+@transactions = http://localhost:8082/api/transactions
+@source = REMPLACER_PAR_UUID_SOURCE
+@destination = REMPLACER_PAR_UUID_DESTINATION
+
+### 1. Créer le compte source ; copier son id dans source
+POST {{accounts}}
+Content-Type: application/json
+
+{
+  "customerReference": "CLIENT-001",
+  "status": "ACTIVE",
+  "currency": "EUR",
+  "balance": 1500
+}
+
+### 2. Créer la destination ; copier son id dans destination
+POST {{accounts}}
+Content-Type: application/json
+
+{
+  "customerReference": "CLIENT-002",
+  "status": "ACTIVE",
+  "currency": "EUR",
+  "balance": 200
+}
+
+### 3. Solde avant transaction : 1500
+GET {{accounts}}/{{source}}/balance
+
+### 4. Transaction valide : 201
+POST {{transactions}}
+Content-Type: application/json
+
+{
+  "accountId": "{{source}}",
+  "amount": 250,
+  "currency": "EUR",
+  "merchantCategory": "GROCERY",
+  "country": "FR"
+}
+
+### 5. Solde après transaction : 1250
+GET {{accounts}}/{{source}}/balance
+
+### 6. Dépassement du plafond : 409
+POST {{transactions}}
+Content-Type: application/json
+
+{
+  "accountId": "{{source}}",
+  "amount": 1000.01,
+  "currency": "EUR",
+  "merchantCategory": "GROCERY",
+  "country": "FR"
+}
+
+### 7. Montant nul : 400
+POST {{transactions}}
+Content-Type: application/json
+
+{
+  "accountId": "{{source}}",
+  "amount": 0,
+  "currency": "EUR",
+  "merchantCategory": "GROCERY",
+  "country": "FR"
+}
+
+### 8. Devise différente : 409
+POST {{transactions}}
+Content-Type: application/json
+
+{
+  "accountId": "{{source}}",
+  "amount": 10,
+  "currency": "MAD",
+  "merchantCategory": "GROCERY",
+  "country": "MA"
+}
+
+### 9. Virement : 201
+POST {{transactions}}/transfers
+Content-Type: application/json
+
+{
+  "sourceAccountId": "{{source}}",
+  "destinationAccountId": "{{destination}}",
+  "amount": 100,
+  "currency": "EUR",
+  "country": "FR"
+}
+
+### 10. Solde source après virement : 1150
+GET {{accounts}}/{{source}}/balance
+
+### 11. Solde destinataire après virement : 300
+GET {{accounts}}/{{destination}}/balance
+
+### 12. Historique du destinataire : un virement
+GET {{transactions}}?accountId={{destination}}
+
+### 13. Bloquer le compte source
+PATCH {{accounts}}/{{source}}/status
+Content-Type: application/json
+
+{"status": "BLOCKED"}
+
+### 14. Compte bloqué : 409
+POST {{transactions}}
+Content-Type: application/json
+
+{
+  "accountId": "{{source}}",
+  "amount": 10,
+  "currency": "EUR",
+  "merchantCategory": "GROCERY",
+  "country": "FR"
+}

@@ -1,0 +1,34 @@
+Etape 2 - verification reelle
+Commande : mvn -B -Dsurefire.timeout=90 package
+Certificats Windows et cache Maven local configures pour cet environnement.
+
+Tests automatises :
+[INFO] Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 31.57 s -- in com.adria.bank.account.AccountServiceTest
+[INFO] Tests run: 14, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 34.94 s -- in com.adria.bank.transaction.TransactionServiceTest
+
+Total : 22 tests, 0 echec, 0 erreur, 0 ignore.
+
+[INFO] Reactor Summary for Bank Platform 0.0.1-SNAPSHOT:
+[INFO] 
+[INFO] Bank Platform ...................................... SUCCESS [  3.014 s]
+[INFO] account-service .................................... SUCCESS [ 45.384 s]
+[INFO] transaction-service ................................ SUCCESS [ 50.060 s]
+[INFO] discovery-service .................................. SUCCESS [  0.501 s]
+[INFO] config-service ..................................... SUCCESS [  0.494 s]
+[INFO] gateway-service .................................... SUCCESS [  0.462 s]
+[INFO] ai-service ......................................... SUCCESS [  0.482 s]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  01:42 min
+[INFO] Finished at: 2026-10-30T10:50:18+01:00
+[INFO] ------------------------------------------------------------------------
+
+Test HTTP entre deux JAR reels : PASS, 19 requetes.
+Client OpenFeign reel, ports temporaires 18081 et 18082.
+Debit : 1500 -> 1250 EUR.
+Apres virement de 100 EUR : source 1150 EUR, destination 300 EUR.
+Montant nul/negatif : 400. Plafond/devise/compte bloque : 409.
+Account-service arrete : 503 ; historique reste a deux transactions.
+Les deux processus du test HTTP ont ete arretes apres verification.
+Details : verification-etape-02-rest.json.

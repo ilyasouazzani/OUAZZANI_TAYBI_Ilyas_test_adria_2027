@@ -21,11 +21,26 @@ Une variable d'environnement OPENAI_API_KEY reste prioritaire.
 ## Vérification
 Depuis la racine : mvn clean package
 
-## État : étape 1
+## Structure Maven
 Le parent Maven centralise Java, Spring Boot, Spring Cloud et Spring AI.
 Les six modules contiennent leur point d'entrée et leur configuration.
-Les dépendances métier et techniques seront ajoutées aux étapes suivantes.
-Les services ne proposent pas encore de serveur HTTP ni de fonctionnalités métier.
+
+## État : étape 2
+account-service et transaction-service proposent les API REST de création et
+de consultation des comptes et transactions, ainsi que les virements.
+Les bases H2 sont distinctes et en mémoire. Le client OpenFeign utilise
+ACCOUNT_SERVICE_URL, avec http://localhost:8081 comme valeur par défaut.
+Le plafond local bank.transaction.max-amount vaut 1000 ; sa centralisation
+sera réalisée à l'étape Config Server.
+
+Les contrôleurs délèguent à une couche service validée. Les contrôles portent
+sur le montant, le plafond, l'existence et l'état du compte, la devise et le
+solde disponible. Les virements modifient les deux soldes dans une transaction
+locale d'account-service. Il n'y a pas de transaction distribuée entre services.
+
+Les instructions de lancement, requêtes REST et captures à réaliser sont dans
+[docs/etape-02-rapport.md](docs/etape-02-rapport.md).
+Les services techniques, MCP, GraphQL, Kafka et l'agent restent à implémenter.
 
 ## Certificats Maven sous Windows
 Si Maven signale « PKIX path building failed » alors que Windows reconnaît
