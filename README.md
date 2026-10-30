@@ -12,11 +12,11 @@
 Java 17 et Maven 3.9.
 
 ## Configuration locale
-Copier .env.example vers .env si nécessaire, puis renseigner OPENAI_API_KEY
+Copier .env.example vers .env si nécessaire, puis renseigner GEMINI_API_KEY
 uniquement dans .env. Le fichier .env est ignoré par Git.
 Les application.properties chargent ce fichier depuis la racine du projet
 ou depuis le dossier parent lors d'une exécution dans un module.
-Une variable d'environnement OPENAI_API_KEY reste prioritaire.
+Une variable d'environnement GEMINI_API_KEY reste prioritaire.
 
 ## Vérification
 Depuis la racine : mvn clean package
@@ -25,7 +25,7 @@ Depuis la racine : mvn clean package
 Le parent Maven centralise Java, Spring Boot, Spring Cloud et Spring AI.
 Les six modules contiennent leur point d'entrée et leur configuration.
 
-## État : étape 4 en validation
+## Périmètre prioritaire final : parties A à F
 account-service et transaction-service proposent les API REST de création et
 de consultation des comptes et transactions, ainsi que les virements.
 Les bases H2 sont distinctes et en mémoire. OpenFeign utilise la découverte
@@ -49,7 +49,35 @@ transaction-service publie après commit sur bank.transactions.created, avec
 accountId comme clé ; son consumer journalise uniquement les messages.
 Les instructions Kafka et MCP sont dans
 [docs/etape-04-rapport.md](docs/etape-04-rapport.md).
-Gateway, GraphQL et l'agent restent à implémenter.
+ai-service découvre les outils des deux serveurs MCP et expose
+POST /api/assistant/chat et GET /api/assistant/tools.
+Pour un test LLM réel, configurer GEMINI_API_KEY et AI_CHAT_MODEL=google-genai dans
+le .env privé, puis redémarrer ai-service. Sans modèle activé, le chat retourne
+une erreur 503 explicite. Voir [docs/etape-05-rapport.md](docs/etape-05-rapport.md).
+Gateway et les connecteurs GraphQL sont implémentés. GraphiQL est disponible
+sur /graphiql dans chaque service métier. Gateway route REST, GraphQL et MCP.
+Les schémas d'architecture et de classes sont dans docs/architecture.mmd et
+docs/diagramme-classes.mmd. Le rapport PDF et les preuves finales sont dans docs/.
+
+## Lancement A-F
+Construire les JAR avant de lancer les applications : mvn clean package.
+Lancer Kafka avec docker compose -f docker-compose.kafka.yml up -d, puis
+exécuter chaque commande ci-dessous dans un terminal distinct à la racine :
+
+```powershell
+java -Xmx192m -jar discovery-service/target/discovery-service-0.0.1-SNAPSHOT.jar
+java -Xmx192m -jar config-service/target/config-service-0.0.1-SNAPSHOT.jar
+java -Xmx192m -jar account-service/target/account-service-0.0.1-SNAPSHOT.jar
+java -Xmx192m -jar transaction-service/target/transaction-service-0.0.1-SNAPSHOT.jar
+java -Xmx192m -jar ai-service/target/ai-service-0.0.1-SNAPSHOT.jar
+java -Xmx192m -jar gateway-service/target/gateway-service-0.0.1-SNAPSHOT.jar
+```
+
+Attendre les messages de démarrage de l'infrastructure avant les services métier,
+puis attendre l'enregistrement et la propagation du registre Eureka avant les
+appels par Gateway. Le dossier docs contient les requêtes de démonstration.
+Les données H2 sont réinitialisées au redémarrage. Les parties G, H et I restent
+hors du périmètre prioritaire A-F demandé en fin de session.
 
 ## Certificats Maven sous Windows
 Si Maven signale « PKIX path building failed » alors que Windows reconnaît

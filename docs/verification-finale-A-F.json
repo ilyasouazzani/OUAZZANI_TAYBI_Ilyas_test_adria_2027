@@ -1,0 +1,736 @@
+{
+  "status": {
+    "config": "PASS",
+    "account_graphql": "PASS",
+    "transaction_graphql": "PASS",
+    "business_rules": "PASS",
+    "kafka_docker": "PASS",
+    "gateway": "PASS",
+    "eureka": "PASS",
+    "agent_mcp": "PASS",
+    "gemini": "PASS"
+  },
+  "checks": [
+    {
+      "port": 18761,
+      "method": "GET",
+      "path": "/actuator/health/readiness",
+      "status": 503,
+      "response": {
+        "status": "OUT_OF_SERVICE"
+      }
+    },
+    {
+      "port": 18761,
+      "method": "GET",
+      "path": "/actuator/health/readiness",
+      "status": 503,
+      "response": {
+        "status": "OUT_OF_SERVICE"
+      }
+    },
+    {
+      "port": 18761,
+      "method": "GET",
+      "path": "/actuator/health/readiness",
+      "status": 503,
+      "response": {
+        "status": "OUT_OF_SERVICE"
+      }
+    },
+    {
+      "port": 18761,
+      "method": "GET",
+      "path": "/actuator/health/readiness",
+      "status": 200,
+      "response": {
+        "status": "UP"
+      }
+    },
+    {
+      "port": 18888,
+      "method": "GET",
+      "path": "/transaction-service/default",
+      "status": 200,
+      "response": {
+        "name": "transaction-service",
+        "profiles": [
+          "default"
+        ],
+        "label": null,
+        "version": null,
+        "state": null,
+        "propertySources": [
+          {
+            "name": "classpath:/config-repo/application.properties",
+            "source": {
+              "bank.transaction.max-amount": "1000",
+              "eureka.client.service-url.defaultZone": "${EUREKA_URL:http://localhost:8761/eureka/}",
+              "eureka.client.registry-fetch-interval-seconds": "5",
+              "eureka.instance.hostname": "${SERVICE_HOST:localhost}",
+              "eureka.instance.initial-instance-info-replication-interval-seconds": "5",
+              "management.endpoint.health.probes.enabled": "true"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "port": 18081,
+      "method": "GET",
+      "path": "/api/accounts",
+      "status": 200,
+      "response": []
+    },
+    {
+      "port": 18082,
+      "method": "GET",
+      "path": "/api/transactions",
+      "status": 200,
+      "response": []
+    },
+    {
+      "port": 18081,
+      "method": "POST",
+      "path": "/api/accounts",
+      "status": 201,
+      "response": {
+        "id": "ca85c8ff-f174-4f76-b6a0-425f12191038",
+        "customerReference": "FINAL-DEMO",
+        "status": "ACTIVE",
+        "currency": "EUR",
+        "balance": 1500.0
+      }
+    },
+    {
+      "port": 18081,
+      "method": "POST",
+      "path": "/graphql",
+      "status": 200,
+      "response": {
+        "data": {
+          "accounts": [
+            {
+              "id": "ca85c8ff-f174-4f76-b6a0-425f12191038",
+              "customerReference": "FINAL-DEMO",
+              "balance": 1500.0
+            }
+          ]
+        }
+      }
+    },
+    {
+      "port": 18761,
+      "method": "GET",
+      "path": "/eureka/apps",
+      "status": 200,
+      "response": {
+        "applications": {
+          "versions__delta": "1",
+          "apps__hashcode": "UP_2_",
+          "application": [
+            {
+              "name": "ACCOUNT-SERVICE",
+              "instance": [
+                {
+                  "instanceId": "localhost:account-service:18081",
+                  "hostName": "127.0.0.1",
+                  "app": "ACCOUNT-SERVICE",
+                  "ipAddr": "192.168.56.1",
+                  "status": "UP",
+                  "overriddenStatus": "UNKNOWN",
+                  "port": {
+                    "$": 18081,
+                    "@enabled": "true"
+                  },
+                  "securePort": {
+                    "$": 443,
+                    "@enabled": "false"
+                  },
+                  "countryId": 1,
+                  "dataCenterInfo": {
+                    "@class": "com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo",
+                    "name": "MyOwn"
+                  },
+                  "leaseInfo": {
+                    "renewalIntervalInSecs": 30,
+                    "durationInSecs": 90,
+                    "registrationTimestamp": 1793360395016,
+                    "lastRenewalTimestamp": 1793360395016,
+                    "evictionTimestamp": 0,
+                    "serviceUpTimestamp": 1793360395018
+                  },
+                  "metadata": {
+                    "management.port": "18081"
+                  },
+                  "homePageUrl": "http://127.0.0.1:18081/",
+                  "statusPageUrl": "http://127.0.0.1:18081/actuator/info",
+                  "healthCheckUrl": "http://127.0.0.1:18081/actuator/health",
+                  "vipAddress": "account-service",
+                  "secureVipAddress": "account-service",
+                  "isCoordinatingDiscoveryServer": "false",
+                  "lastUpdatedTimestamp": "1793360395019",
+                  "lastDirtyTimestamp": "1793360394781",
+                  "actionType": "ADDED"
+                }
+              ]
+            },
+            {
+              "name": "TRANSACTION-SERVICE",
+              "instance": [
+                {
+                  "instanceId": "localhost:transaction-service:18082",
+                  "hostName": "127.0.0.1",
+                  "app": "TRANSACTION-SERVICE",
+                  "ipAddr": "192.168.56.1",
+                  "status": "UP",
+                  "overriddenStatus": "UNKNOWN",
+                  "port": {
+                    "$": 18082,
+                    "@enabled": "true"
+                  },
+                  "securePort": {
+                    "$": 443,
+                    "@enabled": "false"
+                  },
+                  "countryId": 1,
+                  "dataCenterInfo": {
+                    "@class": "com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo",
+                    "name": "MyOwn"
+                  },
+                  "leaseInfo": {
+                    "renewalIntervalInSecs": 30,
+                    "durationInSecs": 90,
+                    "registrationTimestamp": 1793360399005,
+                    "lastRenewalTimestamp": 1793360399005,
+                    "evictionTimestamp": 0,
+                    "serviceUpTimestamp": 1793360399005
+                  },
+                  "metadata": {
+                    "management.port": "18082"
+                  },
+                  "homePageUrl": "http://127.0.0.1:18082/",
+                  "statusPageUrl": "http://127.0.0.1:18082/actuator/info",
+                  "healthCheckUrl": "http://127.0.0.1:18082/actuator/health",
+                  "vipAddress": "transaction-service",
+                  "secureVipAddress": "transaction-service",
+                  "isCoordinatingDiscoveryServer": "false",
+                  "lastUpdatedTimestamp": "1793360399005",
+                  "lastDirtyTimestamp": "1793360398952",
+                  "actionType": "ADDED"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "port": 18082,
+      "method": "POST",
+      "path": "/graphql",
+      "status": 200,
+      "response": {
+        "data": {
+          "createTransaction": {
+            "id": "b646aa38-c66c-4cc0-b2eb-cea743e3374b",
+            "amount": "250",
+            "accountId": "ca85c8ff-f174-4f76-b6a0-425f12191038"
+          }
+        }
+      }
+    },
+    {
+      "port": 18081,
+      "method": "GET",
+      "path": "/api/accounts/ca85c8ff-f174-4f76-b6a0-425f12191038/balance",
+      "status": 200,
+      "response": {
+        "accountId": "ca85c8ff-f174-4f76-b6a0-425f12191038",
+        "currency": "EUR",
+        "balance": 1250.0
+      }
+    },
+    {
+      "port": 18082,
+      "method": "POST",
+      "path": "/graphql",
+      "status": 200,
+      "response": {
+        "data": {
+          "transactions": [
+            {
+              "id": "b646aa38-c66c-4cc0-b2eb-cea743e3374b",
+              "amount": "250.000000000000"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "port": 18082,
+      "method": "POST",
+      "path": "/api/transactions",
+      "status": 409,
+      "response": {
+        "type": "about:blank",
+        "title": "Conflict",
+        "status": 409,
+        "detail": "Amount must be positive and at most 1000",
+        "instance": "/api/transactions"
+      }
+    },
+    {
+      "port": 18080,
+      "method": "GET",
+      "path": "/actuator/health/readiness",
+      "status": 503,
+      "response": {
+        "status": "OUT_OF_SERVICE"
+      }
+    },
+    {
+      "port": 18080,
+      "method": "GET",
+      "path": "/actuator/health/readiness",
+      "status": 503,
+      "response": {
+        "status": "OUT_OF_SERVICE"
+      }
+    },
+    {
+      "port": 18080,
+      "method": "GET",
+      "path": "/actuator/health/readiness",
+      "status": 503,
+      "response": {
+        "status": "OUT_OF_SERVICE"
+      }
+    },
+    {
+      "port": 18080,
+      "method": "GET",
+      "path": "/actuator/health/readiness",
+      "status": 503,
+      "response": {
+        "status": "OUT_OF_SERVICE"
+      }
+    },
+    {
+      "port": 18080,
+      "method": "GET",
+      "path": "/actuator/health/readiness",
+      "status": 200,
+      "response": {
+        "status": "UP"
+      }
+    },
+    {
+      "port": 18080,
+      "method": "GET",
+      "path": "/api/accounts",
+      "status": 200,
+      "response": [
+        {
+          "id": "ca85c8ff-f174-4f76-b6a0-425f12191038",
+          "customerReference": "FINAL-DEMO",
+          "status": "ACTIVE",
+          "currency": "EUR",
+          "balance": 1250.0
+        }
+      ]
+    },
+    {
+      "port": 18080,
+      "method": "POST",
+      "path": "/accounts/graphql",
+      "status": 200,
+      "response": {
+        "data": {
+          "accounts": [
+            {
+              "id": "ca85c8ff-f174-4f76-b6a0-425f12191038",
+              "customerReference": "FINAL-DEMO",
+              "balance": 1250.0
+            }
+          ]
+        }
+      }
+    },
+    {
+      "port": 18761,
+      "method": "GET",
+      "path": "/eureka/apps",
+      "status": 200,
+      "response": {
+        "applications": {
+          "versions__delta": "1",
+          "apps__hashcode": "UP_4_",
+          "application": [
+            {
+              "name": "ACCOUNT-SERVICE",
+              "instance": [
+                {
+                  "instanceId": "localhost:account-service:18081",
+                  "hostName": "127.0.0.1",
+                  "app": "ACCOUNT-SERVICE",
+                  "ipAddr": "192.168.56.1",
+                  "status": "UP",
+                  "overriddenStatus": "UNKNOWN",
+                  "port": {
+                    "$": 18081,
+                    "@enabled": "true"
+                  },
+                  "securePort": {
+                    "$": 443,
+                    "@enabled": "false"
+                  },
+                  "countryId": 1,
+                  "dataCenterInfo": {
+                    "@class": "com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo",
+                    "name": "MyOwn"
+                  },
+                  "leaseInfo": {
+                    "renewalIntervalInSecs": 30,
+                    "durationInSecs": 90,
+                    "registrationTimestamp": 1793360395016,
+                    "lastRenewalTimestamp": 1793360395016,
+                    "evictionTimestamp": 0,
+                    "serviceUpTimestamp": 1793360395018
+                  },
+                  "metadata": {
+                    "management.port": "18081"
+                  },
+                  "homePageUrl": "http://127.0.0.1:18081/",
+                  "statusPageUrl": "http://127.0.0.1:18081/actuator/info",
+                  "healthCheckUrl": "http://127.0.0.1:18081/actuator/health",
+                  "vipAddress": "account-service",
+                  "secureVipAddress": "account-service",
+                  "isCoordinatingDiscoveryServer": "false",
+                  "lastUpdatedTimestamp": "1793360395019",
+                  "lastDirtyTimestamp": "1793360394781",
+                  "actionType": "ADDED"
+                }
+              ]
+            },
+            {
+              "name": "TRANSACTION-SERVICE",
+              "instance": [
+                {
+                  "instanceId": "localhost:transaction-service:18082",
+                  "hostName": "127.0.0.1",
+                  "app": "TRANSACTION-SERVICE",
+                  "ipAddr": "192.168.56.1",
+                  "status": "UP",
+                  "overriddenStatus": "UNKNOWN",
+                  "port": {
+                    "$": 18082,
+                    "@enabled": "true"
+                  },
+                  "securePort": {
+                    "$": 443,
+                    "@enabled": "false"
+                  },
+                  "countryId": 1,
+                  "dataCenterInfo": {
+                    "@class": "com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo",
+                    "name": "MyOwn"
+                  },
+                  "leaseInfo": {
+                    "renewalIntervalInSecs": 30,
+                    "durationInSecs": 90,
+                    "registrationTimestamp": 1793360399005,
+                    "lastRenewalTimestamp": 1793360399005,
+                    "evictionTimestamp": 0,
+                    "serviceUpTimestamp": 1793360399005
+                  },
+                  "metadata": {
+                    "management.port": "18082"
+                  },
+                  "homePageUrl": "http://127.0.0.1:18082/",
+                  "statusPageUrl": "http://127.0.0.1:18082/actuator/info",
+                  "healthCheckUrl": "http://127.0.0.1:18082/actuator/health",
+                  "vipAddress": "transaction-service",
+                  "secureVipAddress": "transaction-service",
+                  "isCoordinatingDiscoveryServer": "false",
+                  "lastUpdatedTimestamp": "1793360399005",
+                  "lastDirtyTimestamp": "1793360398952",
+                  "actionType": "ADDED"
+                }
+              ]
+            },
+            {
+              "name": "GATEWAY-SERVICE",
+              "instance": [
+                {
+                  "instanceId": "localhost:gateway-service:18080",
+                  "hostName": "127.0.0.1",
+                  "app": "GATEWAY-SERVICE",
+                  "ipAddr": "192.168.56.1",
+                  "status": "UP",
+                  "overriddenStatus": "UNKNOWN",
+                  "port": {
+                    "$": 18080,
+                    "@enabled": "true"
+                  },
+                  "securePort": {
+                    "$": 443,
+                    "@enabled": "false"
+                  },
+                  "countryId": 1,
+                  "dataCenterInfo": {
+                    "@class": "com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo",
+                    "name": "MyOwn"
+                  },
+                  "leaseInfo": {
+                    "renewalIntervalInSecs": 30,
+                    "durationInSecs": 90,
+                    "registrationTimestamp": 1793360418759,
+                    "lastRenewalTimestamp": 1793360418759,
+                    "evictionTimestamp": 0,
+                    "serviceUpTimestamp": 1793360418759
+                  },
+                  "metadata": {
+                    "management.port": "18080"
+                  },
+                  "homePageUrl": "http://127.0.0.1:18080/",
+                  "statusPageUrl": "http://127.0.0.1:18080/actuator/info",
+                  "healthCheckUrl": "http://127.0.0.1:18080/actuator/health",
+                  "vipAddress": "gateway-service",
+                  "secureVipAddress": "gateway-service",
+                  "isCoordinatingDiscoveryServer": "false",
+                  "lastUpdatedTimestamp": "1793360418759",
+                  "lastDirtyTimestamp": "1793360418682",
+                  "actionType": "ADDED"
+                }
+              ]
+            },
+            {
+              "name": "CONFIG-SERVICE",
+              "instance": [
+                {
+                  "instanceId": "localhost:config-service:18888",
+                  "hostName": "127.0.0.1",
+                  "app": "CONFIG-SERVICE",
+                  "ipAddr": "192.168.56.1",
+                  "status": "UP",
+                  "overriddenStatus": "UNKNOWN",
+                  "port": {
+                    "$": 18888,
+                    "@enabled": "true"
+                  },
+                  "securePort": {
+                    "$": 443,
+                    "@enabled": "false"
+                  },
+                  "countryId": 1,
+                  "dataCenterInfo": {
+                    "@class": "com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo",
+                    "name": "MyOwn"
+                  },
+                  "leaseInfo": {
+                    "renewalIntervalInSecs": 30,
+                    "durationInSecs": 90,
+                    "registrationTimestamp": 1793360401650,
+                    "lastRenewalTimestamp": 1793360401650,
+                    "evictionTimestamp": 0,
+                    "serviceUpTimestamp": 1793360401642
+                  },
+                  "metadata": {
+                    "management.port": "18888"
+                  },
+                  "homePageUrl": "http://127.0.0.1:18888/",
+                  "statusPageUrl": "http://127.0.0.1:18888/actuator/info",
+                  "healthCheckUrl": "http://127.0.0.1:18888/actuator/health",
+                  "vipAddress": "config-service",
+                  "secureVipAddress": "config-service",
+                  "isCoordinatingDiscoveryServer": "false",
+                  "lastUpdatedTimestamp": "1793360401650",
+                  "lastDirtyTimestamp": "1793360401633",
+                  "actionType": "ADDED"
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    {
+      "port": 18888,
+      "method": "GET",
+      "path": "/transaction-service/default",
+      "status": 200,
+      "response": {
+        "name": "transaction-service",
+        "profiles": [
+          "default"
+        ],
+        "label": null,
+        "version": null,
+        "state": null,
+        "propertySources": [
+          {
+            "name": "classpath:/config-repo/application.properties",
+            "source": {
+              "bank.transaction.max-amount": "1000",
+              "eureka.client.service-url.defaultZone": "${EUREKA_URL:http://localhost:8761/eureka/}",
+              "eureka.client.registry-fetch-interval-seconds": "5",
+              "eureka.instance.hostname": "${SERVICE_HOST:localhost}",
+              "eureka.instance.initial-instance-info-replication-interval-seconds": "5",
+              "management.endpoint.health.probes.enabled": "true"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "port": 18081,
+      "method": "GET",
+      "path": "/api/accounts",
+      "status": 200,
+      "response": []
+    },
+    {
+      "port": 18082,
+      "method": "GET",
+      "path": "/api/transactions",
+      "status": 200,
+      "response": []
+    },
+    {
+      "port": 18081,
+      "method": "POST",
+      "path": "/api/accounts",
+      "status": 201,
+      "response": {
+        "id": "3501611e-eeea-4197-891b-a564a2b22a8d",
+        "customerReference": "AGENT-DEMO",
+        "status": "ACTIVE",
+        "currency": "EUR",
+        "balance": 1250.0
+      }
+    },
+    {
+      "port": 18888,
+      "method": "GET",
+      "path": "/transaction-service/default",
+      "status": 200,
+      "response": {
+        "name": "transaction-service",
+        "profiles": [
+          "default"
+        ],
+        "label": null,
+        "version": null,
+        "state": null,
+        "propertySources": [
+          {
+            "name": "classpath:/config-repo/application.properties",
+            "source": {
+              "bank.transaction.max-amount": "1000",
+              "eureka.client.service-url.defaultZone": "${EUREKA_URL:http://localhost:8761/eureka/}",
+              "eureka.client.registry-fetch-interval-seconds": "5",
+              "eureka.instance.hostname": "${SERVICE_HOST:localhost}",
+              "eureka.instance.initial-instance-info-replication-interval-seconds": "5",
+              "management.endpoint.health.probes.enabled": "true"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "port": 18081,
+      "method": "GET",
+      "path": "/api/accounts",
+      "status": 200,
+      "response": []
+    },
+    {
+      "port": 18082,
+      "method": "GET",
+      "path": "/api/transactions",
+      "status": 200,
+      "response": []
+    },
+    {
+      "port": 18081,
+      "method": "POST",
+      "path": "/api/accounts",
+      "status": 201,
+      "response": {
+        "id": "175968ad-f112-416c-9c47-aef217232eb4",
+        "customerReference": "AGENT-DEMO",
+        "status": "ACTIVE",
+        "currency": "EUR",
+        "balance": 1250.0
+      }
+    },
+    {
+      "port": 18083,
+      "method": "GET",
+      "path": "/api/assistant/tools",
+      "status": 200,
+      "response": [
+        {
+          "name": "transferMoney",
+          "description": "Transfer money between two distinct active accounts in the same currency; only execute an explicitly requested transfer",
+          "inputSchema": "{\"additionalProperties\":false,\"type\":\"object\",\"properties\":{\"sourceAccountId\":{\"type\":\"string\"},\"destinationAccountId\":{\"type\":\"string\"},\"amount\":{\"type\":\"number\"},\"currency\":{\"type\":\"string\"},\"country\":{\"type\":\"string\"}},\"required\":[\"sourceAccountId\",\"destinationAccountId\",\"amount\",\"currency\",\"country\"]}"
+        },
+        {
+          "name": "listAccountTransactions",
+          "description": "List transactions and transfers involving an account UUID",
+          "inputSchema": "{\"additionalProperties\":false,\"type\":\"object\",\"properties\":{\"accountId\":{\"type\":\"string\"}},\"required\":[\"accountId\"]}"
+        },
+        {
+          "name": "createTransaction",
+          "description": "Debit an active account after checking currency, balance and configured ceiling; only execute an explicitly requested debit",
+          "inputSchema": "{\"additionalProperties\":false,\"type\":\"object\",\"properties\":{\"accountId\":{\"type\":\"string\"},\"amount\":{\"type\":\"number\"},\"currency\":{\"type\":\"string\"},\"merchantCategory\":{\"type\":\"string\"},\"country\":{\"type\":\"string\"}},\"required\":[\"accountId\",\"amount\",\"currency\",\"merchantCategory\",\"country\"]}"
+        },
+        {
+          "name": "getTransaction",
+          "description": "Get one bank transaction by its UUID",
+          "inputSchema": "{\"additionalProperties\":false,\"type\":\"object\",\"properties\":{\"transactionId\":{\"type\":\"string\"}},\"required\":[\"transactionId\"]}"
+        },
+        {
+          "name": "listAccounts",
+          "description": "List all bank accounts and their identifiers",
+          "inputSchema": "{\"additionalProperties\":false,\"type\":\"object\",\"properties\":{},\"required\":[]}"
+        },
+        {
+          "name": "getAccount",
+          "description": "Get an existing account, its status, currency and balance by UUID",
+          "inputSchema": "{\"additionalProperties\":false,\"type\":\"object\",\"properties\":{\"accountId\":{\"type\":\"string\"}},\"required\":[\"accountId\"]}"
+        },
+        {
+          "name": "getAccountBalance",
+          "description": "Read the current balance and currency of a bank account by UUID",
+          "inputSchema": "{\"additionalProperties\":false,\"type\":\"object\",\"properties\":{\"accountId\":{\"type\":\"string\"}},\"required\":[\"accountId\"]}"
+        }
+      ]
+    },
+    {
+      "port": 18080,
+      "method": "GET",
+      "path": "/api/accounts",
+      "status": 200,
+      "response": [
+        {
+          "id": "175968ad-f112-416c-9c47-aef217232eb4",
+          "customerReference": "AGENT-DEMO",
+          "status": "ACTIVE",
+          "currency": "EUR",
+          "balance": 1250.0
+        }
+      ]
+    },
+    {
+      "port": 18083,
+      "method": "POST",
+      "path": "/api/assistant/chat",
+      "status": 200,
+      "response": {
+        "answer": "1250.0 EUR"
+      }
+    }
+  ]
+}
