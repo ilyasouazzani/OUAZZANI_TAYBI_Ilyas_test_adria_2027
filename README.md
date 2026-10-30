@@ -25,7 +25,7 @@ Depuis la racine : mvn clean package
 Le parent Maven centralise Java, Spring Boot, Spring Cloud et Spring AI.
 Les six modules contiennent leur point d'entrée et leur configuration.
 
-## État : étape 3
+## État : étape 4 en validation
 account-service et transaction-service proposent les API REST de création et
 de consultation des comptes et transactions, ainsi que les virements.
 Les bases H2 sont distinctes et en mémoire. OpenFeign utilise la découverte
@@ -44,7 +44,12 @@ Eureka et Config Server sont implémentés. Resilience4J protège les appels Fei
 avec circuit breaker, retry des lectures et fallback HTTP 503.
 Les instructions de démarrage et les captures de cette étape sont dans
 [docs/etape-03-rapport.md](docs/etape-03-rapport.md).
-Gateway, MCP, GraphQL, Kafka et l'agent restent à implémenter.
+Les deux services exposent MCP sur /mcp avec le transport Streamable HTTP.
+transaction-service publie après commit sur bank.transactions.created, avec
+accountId comme clé ; son consumer journalise uniquement les messages.
+Les instructions Kafka et MCP sont dans
+[docs/etape-04-rapport.md](docs/etape-04-rapport.md).
+Gateway, GraphQL et l'agent restent à implémenter.
 
 ## Certificats Maven sous Windows
 Si Maven signale « PKIX path building failed » alors que Windows reconnaît

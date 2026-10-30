@@ -1,0 +1,104 @@
+{
+  "jsonrpc": "2.0",
+  "id": 2,
+  "result": {
+    "tools": [
+      {
+        "name": "transferMoney",
+        "description": "Transfer money between two distinct active accounts in the same currency; only execute an explicitly requested transfer",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "sourceAccountId": {
+              "type": "string"
+            },
+            "destinationAccountId": {
+              "type": "string"
+            },
+            "amount": {
+              "type": "number"
+            },
+            "currency": {
+              "type": "string"
+            },
+            "country": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "sourceAccountId",
+            "destinationAccountId",
+            "amount",
+            "currency",
+            "country"
+          ],
+          "additionalProperties": false
+        }
+      },
+      {
+        "name": "listAccountTransactions",
+        "description": "List transactions and transfers involving an account UUID",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "accountId": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "accountId"
+          ],
+          "additionalProperties": false
+        }
+      },
+      {
+        "name": "createTransaction",
+        "description": "Debit an active account after checking currency, balance and configured ceiling; only execute an explicitly requested debit",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "accountId": {
+              "type": "string"
+            },
+            "amount": {
+              "type": "number"
+            },
+            "currency": {
+              "type": "string"
+            },
+            "merchantCategory": {
+              "type": "string"
+            },
+            "country": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "accountId",
+            "amount",
+            "currency",
+            "merchantCategory",
+            "country"
+          ],
+          "additionalProperties": false
+        }
+      },
+      {
+        "name": "getTransaction",
+        "description": "Get one bank transaction by its UUID",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "transactionId": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "transactionId"
+          ],
+          "additionalProperties": false
+        }
+      }
+    ]
+  }
+}

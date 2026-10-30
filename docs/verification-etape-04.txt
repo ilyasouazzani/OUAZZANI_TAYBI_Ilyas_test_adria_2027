@@ -1,0 +1,30 @@
+Etape 4 : verification reelle
+27 tests : aucun echec, aucune erreur.
+Kafka : broker KRaft embarque dans KafkaTransactionTest.
+Le test verifie la cle accountId, les sept champs JSON, la reception et une seule transaction en base.
+Les autres tests de service simulent KafkaTemplate et ne constituent pas une preuve de livraison Kafka.
+
+[INFO] Tests run: 8, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 11.55 s -- in com.adria.bank.account.AccountServiceTest
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.777 s -- in com.adria.bank.transaction.AccountGatewayTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 17.21 s -- in com.adria.bank.transaction.KafkaTransactionTest
+[INFO] Tests run: 14, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 7.195 s -- in com.adria.bank.transaction.TransactionServiceTest
+
+2026-10-30T11:50:34.283+01:00  INFO 31152 --- [ntainer#0-0-C-1] c.a.b.t.s.m.TransactionMessaging         : Received TransactionCreated topic=bank.transactions.created key=04c79a2f-2836-4bf8-bc7e-330d19530ee1 payload={"eventId":"8ddaa893-72f4-4027-a1ca-b02e87bbb08a","eventType":"TransactionCreated","transactionId":"659f09b1-31b9-4f08-b320-a637e75cbebf","accountId":"04c79a2f-2836-4bf8-bc7e-330d19530ee1","amount":250,"currency":"EUR","occurredAt":"2026-10-30T10:50:34.020920600Z"}
+
+[INFO] Reactor Summary for Bank Platform 0.0.1-SNAPSHOT:
+[INFO] 
+[INFO] Bank Platform ...................................... SUCCESS [  0.651 s]
+[INFO] account-service .................................... SUCCESS [ 15.847 s]
+[INFO] transaction-service ................................ SUCCESS [ 31.537 s]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  48.582 s
+[INFO] Finished at: 2026-10-30T11:50:44+01:00
+[INFO] ------------------------------------------------------------------------
+
+MCP : PASS sur les deux JAR reels, endpoint /mcp, sessions JSON-RPC Streamable HTTP.
+Trois outils account-service et quatre outils transaction-service decouverts.
+getAccountBalance retourne 1500 EUR.
+createTransaction avec montant 0 retourne une erreur MCP et ne persiste aucune transaction.
+Docker : moteur non disponible pendant cette verification ; compose Kafka non execute.

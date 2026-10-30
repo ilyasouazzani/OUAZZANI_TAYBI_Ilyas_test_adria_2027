@@ -1,6 +1,8 @@
 package com.adria.bank.transaction.service;
 
 import com.adria.bank.transaction.domain.BankTransaction;
+import com.adria.bank.transaction.domain.TransactionCreated;
+import org.springframework.context.ApplicationEventPublisher;
 import com.adria.bank.transaction.repository.TransactionRepository;
 import com.adria.bank.transaction.service.client.AccountClient;
 import com.adria.bank.transaction.service.client.AccountClient.AccountSnapshot;
@@ -24,13 +26,15 @@ public class TransactionService {
     private final TransactionRepository transactions;
     private final AccountGateway accounts;
     private final BigDecimal maxAmount;
+    private final ApplicationEventPublisher events;
 
     public TransactionService(TransactionRepository transactions, AccountGateway accounts,
-                              @Value("${bank.transaction.max-amount}") BigDecimal maxAmount) {
+                              @Value("${bank.transaction.max-amount}") BigDecimal maxAmount, ApplicationEventPublisher events) {
         if (maxAmount.signum() <= 0) throw new IllegalArgumentException("Transaction ceiling must be positive");
         this.transactions = transactions;
         this.accounts = accounts;
         this.maxAmount = maxAmount;
+        this.events = events;
     }
 
     public List<BankTransaction> list(UUID accountId) {
@@ -51,6 +55,7 @@ public class TransactionService {
         BankTransaction transaction = transactions.saveAndFlush(new BankTransaction(request.accountId(), null,
                 request.amount(), request.currency(), request.merchantCategory(), request.country()));
         accounts.debit(request.accountId(), new AccountClient.Debit(request.amount(), request.currency()));
+        events.publishEvent(TransactionCreated.from(transaction));
         return transaction;
     }
 
@@ -69,6 +74,7 @@ public class TransactionService {
                 request.destinationAccountId(), request.amount(), request.currency(), "TRANSFER", request.country()));
         accounts.transfer(new AccountClient.Transfer(request.sourceAccountId(), request.destinationAccountId(),
                 request.amount(), request.currency()));
+        events.publishEvent(TransactionCreated.from(transaction));
         return transaction;
     }
 

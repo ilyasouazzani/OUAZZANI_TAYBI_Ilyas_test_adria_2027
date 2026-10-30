@@ -1,0 +1,218 @@
+{
+  "result": "PASS",
+  "checks": [
+    {
+      "port": 8081,
+      "method": "tools/list",
+      "response": {
+        "jsonrpc": "2.0",
+        "id": 2,
+        "result": {
+          "tools": [
+            {
+              "name": "listAccounts",
+              "description": "List all bank accounts and their identifiers",
+              "inputSchema": {
+                "type": "object",
+                "properties": {},
+                "required": [],
+                "additionalProperties": false
+              }
+            },
+            {
+              "name": "getAccount",
+              "description": "Get an existing account, its status, currency and balance by UUID",
+              "inputSchema": {
+                "type": "object",
+                "properties": {
+                  "accountId": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "accountId"
+                ],
+                "additionalProperties": false
+              }
+            },
+            {
+              "name": "getAccountBalance",
+              "description": "Read the current balance and currency of a bank account by UUID",
+              "inputSchema": {
+                "type": "object",
+                "properties": {
+                  "accountId": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "accountId"
+                ],
+                "additionalProperties": false
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "port": 8081,
+      "method": "tools/call",
+      "response": {
+        "jsonrpc": "2.0",
+        "id": 3,
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"accountId\":\"b9b43879-88ce-4fe3-a104-732fb3912054\",\"currency\":\"EUR\",\"balance\":1500.0}"
+            }
+          ],
+          "isError": false
+        }
+      }
+    },
+    {
+      "port": 8082,
+      "method": "tools/list",
+      "response": {
+        "jsonrpc": "2.0",
+        "id": 2,
+        "result": {
+          "tools": [
+            {
+              "name": "transferMoney",
+              "description": "Transfer money between two distinct active accounts in the same currency; only execute an explicitly requested transfer",
+              "inputSchema": {
+                "type": "object",
+                "properties": {
+                  "sourceAccountId": {
+                    "type": "string"
+                  },
+                  "destinationAccountId": {
+                    "type": "string"
+                  },
+                  "amount": {
+                    "type": "number"
+                  },
+                  "currency": {
+                    "type": "string"
+                  },
+                  "country": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "sourceAccountId",
+                  "destinationAccountId",
+                  "amount",
+                  "currency",
+                  "country"
+                ],
+                "additionalProperties": false
+              }
+            },
+            {
+              "name": "listAccountTransactions",
+              "description": "List transactions and transfers involving an account UUID",
+              "inputSchema": {
+                "type": "object",
+                "properties": {
+                  "accountId": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "accountId"
+                ],
+                "additionalProperties": false
+              }
+            },
+            {
+              "name": "createTransaction",
+              "description": "Debit an active account after checking currency, balance and configured ceiling; only execute an explicitly requested debit",
+              "inputSchema": {
+                "type": "object",
+                "properties": {
+                  "accountId": {
+                    "type": "string"
+                  },
+                  "amount": {
+                    "type": "number"
+                  },
+                  "currency": {
+                    "type": "string"
+                  },
+                  "merchantCategory": {
+                    "type": "string"
+                  },
+                  "country": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "accountId",
+                  "amount",
+                  "currency",
+                  "merchantCategory",
+                  "country"
+                ],
+                "additionalProperties": false
+              }
+            },
+            {
+              "name": "getTransaction",
+              "description": "Get one bank transaction by its UUID",
+              "inputSchema": {
+                "type": "object",
+                "properties": {
+                  "transactionId": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "transactionId"
+                ],
+                "additionalProperties": false
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "port": 8082,
+      "method": "tools/call",
+      "response": {
+        "jsonrpc": "2.0",
+        "id": 3,
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "create.request.amount: doit \u00eatre sup\u00e9rieur \u00e0 0"
+            }
+          ],
+          "isError": true
+        }
+      }
+    },
+    {
+      "port": 8082,
+      "method": "tools/call",
+      "response": {
+        "jsonrpc": "2.0",
+        "id": 4,
+        "result": {
+          "content": [
+            {
+              "type": "text",
+              "text": "{\"id\":\"33c01989-adb2-4e58-982e-f41d2bacb3db\",\"accountId\":\"b9b43879-88ce-4fe3-a104-732fb3912054\",\"destinationAccountId\":null,\"amount\":250,\"currency\":\"EUR\",\"merchantCategory\":\"GROCERY\",\"country\":\"FR\",\"createdAt\":1793358134.150160700}"
+            }
+          ],
+          "isError": false
+        }
+      }
+    }
+  ]
+}

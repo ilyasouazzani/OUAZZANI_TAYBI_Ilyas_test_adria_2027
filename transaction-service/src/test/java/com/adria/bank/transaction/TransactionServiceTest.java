@@ -43,6 +43,7 @@ class TransactionServiceTest {
     @Autowired MockMvc mvc;
     @Autowired ObjectMapper json;
     @MockitoBean AccountClient accounts;
+    @MockitoBean org.springframework.kafka.core.KafkaTemplate<String, String> kafka;
     @Autowired io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry breakers;
 
     private final UUID sourceId = UUID.randomUUID();
@@ -51,6 +52,7 @@ class TransactionServiceTest {
     @BeforeEach
     void clean() {
         repository.deleteAll();
+        when(kafka.send(anyString(), anyString(), anyString())).thenReturn(java.util.concurrent.CompletableFuture.completedFuture(null));
         breakers.circuitBreaker("accountService").reset();
         when(accounts.get(sourceId)).thenReturn(new AccountSnapshot(sourceId, "A", "ACTIVE", "EUR", 2000));
         when(accounts.get(targetId)).thenReturn(new AccountSnapshot(targetId, "B", "ACTIVE", "EUR", 100));
@@ -136,6 +138,7 @@ class TransactionServiceTest {
                         .content(json.writeValueAsString(request("10"))))
                 .andExpect(status().isServiceUnavailable());
         assertThat(repository.count()).isZero();
+        verify(kafka, never()).send(anyString(), anyString(), anyString());
     }
 
     @Test
