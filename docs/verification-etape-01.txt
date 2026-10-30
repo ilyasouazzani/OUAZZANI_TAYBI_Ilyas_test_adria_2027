@@ -1,0 +1,15 @@
+[INFO] Reactor Summary for Bank Platform 0.0.1-SNAPSHOT:
+[INFO] 
+[INFO] Bank Platform ...................................... SUCCESS [ 25.275 s]
+[INFO] account-service .................................... SUCCESS [ 34.105 s]
+[INFO] transaction-service ................................ SUCCESS [  2.115 s]
+[INFO] discovery-service .................................. SUCCESS [  1.938 s]
+[INFO] config-service ..................................... SUCCESS [  1.972 s]
+[INFO] gateway-service .................................... SUCCESS [  1.895 s]
+[INFO] ai-service ......................................... SUCCESS [  1.821 s]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  01:24 min
+[INFO] Finished at: 2026-10-30T10:35:10+01:00
+[INFO] ------------------------------------------------------------------------
