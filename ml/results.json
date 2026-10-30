@@ -1,0 +1,32 @@
+{
+  "rows": 5000,
+  "fraud_rate": 0.0514,
+  "missing": {
+    "transaction_id": 0,
+    "account_id": 0,
+    "amount": 0,
+    "hour": 0,
+    "country": 66,
+    "merchant_category": 84,
+    "transactions_last_24h": 0,
+    "average_amount_last_7d": 75,
+    "is_fraud": 0
+  },
+  "train_rows": 4000,
+  "test_rows": 1000,
+  "threshold": 0.5,
+  "precision": 0.12213740458015267,
+  "recall": 0.6274509803921569,
+  "f1": 0.20447284345047922,
+  "average_precision": 0.1886052408479398,
+  "confusion_matrix": [
+    [
+      719,
+      230
+    ],
+    [
+      19,
+      32
+    ]
+  ]
+}

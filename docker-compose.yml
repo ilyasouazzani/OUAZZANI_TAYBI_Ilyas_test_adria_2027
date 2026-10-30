@@ -1,0 +1,113 @@
+services:
+  kafka:
+    image: apache/kafka:3.9.1
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_LISTENERS: PLAINTEXT://:9092,CONTROLLER://:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+    healthcheck:
+      test: ["CMD", "/opt/kafka/bin/kafka-topics.sh", "--bootstrap-server", "localhost:9092", "--list"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
+  discovery-service:
+    build:
+      context: .
+      dockerfile: discovery-service/Dockerfile
+    image: ${IMAGE_PREFIX:-bank}/discovery-service:${IMAGE_TAG:-local}
+    ports: ["8761:8761"]
+    restart: on-failure
+    environment:
+      SERVICE_HOST: discovery-service
+      EUREKA_URL: http://discovery-service:8761/eureka/
+      CONFIG_SERVER_URL: http://config-service:8888
+  config-service:
+    build:
+      context: .
+      dockerfile: config-service/Dockerfile
+    image: ${IMAGE_PREFIX:-bank}/config-service:${IMAGE_TAG:-local}
+    ports: ["8888:8888"]
+    restart: on-failure
+    environment:
+      SERVICE_HOST: config-service
+      EUREKA_URL: http://discovery-service:8761/eureka/
+      CONFIG_SERVER_URL: http://config-service:8888
+    depends_on:
+      discovery-service:
+        condition: service_started
+  account-service:
+    build:
+      context: .
+      dockerfile: account-service/Dockerfile
+    image: ${IMAGE_PREFIX:-bank}/account-service:${IMAGE_TAG:-local}
+    ports: ["8081:8081"]
+    restart: on-failure
+    environment:
+      SERVICE_HOST: account-service
+      EUREKA_URL: http://discovery-service:8761/eureka/
+      CONFIG_SERVER_URL: http://config-service:8888
+    depends_on:
+      config-service:
+        condition: service_started
+  transaction-service:
+    build:
+      context: .
+      dockerfile: transaction-service/Dockerfile
+    image: ${IMAGE_PREFIX:-bank}/transaction-service:${IMAGE_TAG:-local}
+    ports: ["8082:8082"]
+    restart: on-failure
+    environment:
+      SERVICE_HOST: transaction-service
+      EUREKA_URL: http://discovery-service:8761/eureka/
+      CONFIG_SERVER_URL: http://config-service:8888
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
+    depends_on:
+      config-service:
+        condition: service_started
+      kafka:
+        condition: service_healthy
+  ai-service:
+    build:
+      context: .
+      dockerfile: ai-service/Dockerfile
+    image: ${IMAGE_PREFIX:-bank}/ai-service:${IMAGE_TAG:-local}
+    ports: ["8083:8083"]
+    restart: on-failure
+    environment:
+      SERVICE_HOST: ai-service
+      EUREKA_URL: http://discovery-service:8761/eureka/
+      CONFIG_SERVER_URL: http://config-service:8888
+      ACCOUNT_MCP_URL: http://account-service:8081
+      TRANSACTION_MCP_URL: http://transaction-service:8082
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      GEMINI_MODEL: ${GEMINI_MODEL:-gemini-flash-lite-latest}
+      AI_CHAT_MODEL: ${AI_CHAT_MODEL:-none}
+    depends_on:
+      config-service:
+        condition: service_started
+      account-service:
+        condition: service_started
+      transaction-service:
+        condition: service_started
+  gateway-service:
+    build:
+      context: .
+      dockerfile: gateway-service/Dockerfile
+    image: ${IMAGE_PREFIX:-bank}/gateway-service:${IMAGE_TAG:-local}
+    ports: ["8080:8080"]
+    restart: on-failure
+    environment:
+      SERVICE_HOST: gateway-service
+      EUREKA_URL: http://discovery-service:8761/eureka/
+      CONFIG_SERVER_URL: http://config-service:8888
+    depends_on:
+      config-service:
+        condition: service_started
